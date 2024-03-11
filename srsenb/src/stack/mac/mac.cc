@@ -658,7 +658,7 @@ int mac::get_dl_sched(uint32_t tti_tx_dl, dl_sched_list_t& dl_sched_res_list)
       return SRSRAN_ERROR;
     }
 
-    int         n            = 0;
+    int n = 0;
     dl_sched_t* dl_sched_res = &dl_sched_res_list[enb_cc_idx];
 
     // Copy data grants
@@ -945,6 +945,8 @@ uint8_t* mac::assemble_rar(sched_interface::dl_sched_rar_grant_t* grants,
     for (uint32_t i = 0; i < nof_grants; i++) {
       srsran_dci_rar_pack(&grants[i].grant, grant_buffer);
       if (pdu->new_subh()) {
+        printf("TA CMD - mac.cc - %d\n", grants[i].data.ta_cmd);
+        logger.info("TA CMD - mac.cc - %d\n", grants[i].data.ta_cmd);
         pdu->get()->set_rapid(grants[i].data.preamble_idx);
         pdu->get()->set_ta_cmd(grants[i].data.ta_cmd);
         pdu->get()->set_temp_crnti(grants[i].data.temp_crnti);

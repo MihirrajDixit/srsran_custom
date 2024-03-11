@@ -1,0 +1,43 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"srsue/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 50,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "share/srsran",
+			"paths" : 
+			[
+				"srsue/ue.conf.example"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "srsue",
+		"source" : "srsue"
+	}
+}

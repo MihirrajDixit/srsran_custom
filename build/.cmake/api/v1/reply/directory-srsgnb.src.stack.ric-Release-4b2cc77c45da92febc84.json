@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "srsgnb/src/stack/ric",
+		"source" : "srsgnb/src/stack/ric"
+	}
+}

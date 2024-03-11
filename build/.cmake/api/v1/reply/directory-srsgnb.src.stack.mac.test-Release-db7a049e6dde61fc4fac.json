@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "srsgnb/src/stack/mac/test",
+		"source" : "srsgnb/src/stack/mac/test"
+	}
+}

@@ -295,6 +295,7 @@ uint32_t ue::set_ta(int ta_)
     uint32_t ta_cmd = (uint32_t)(ta_value + 31);
     pending_ta_commands.try_push(ta_cmd);
     nof_cmd++;
+    printf("Added TA CMD: mod_ta=%d, rnti=0x%x, ta=%d, ta_value=%d, ta_cmd=%d\n", ta, rnti, ta_, ta_value, ta_cmd);
     logger.info("Added TA CMD: rnti=0x%x, ta=%d, ta_value=%d, ta_cmd=%d", rnti, ta_, ta_value, ta_cmd);
   } while (ta_value <= -31 || ta_value >= 32);
   return nof_cmd;
@@ -503,7 +504,9 @@ void ue::allocate_ce(srsran::sch_pdu* pdu, uint32_t lcid)
     case srsran::dl_sch_lcid::TA_CMD:
       if (pdu->new_subh()) {
         uint32_t ta_cmd = 31;
+        printf("pending ta commands - %d\n", ta_cmd);
         pending_ta_commands.try_pop(&ta_cmd);
+        printf("pending ta commands popped - %d\n", ta_cmd);
         if (!pdu->get()->set_ta_cmd(ta_cmd)) {
           logger.error("CE:    Setting TA CMD CE");
         }

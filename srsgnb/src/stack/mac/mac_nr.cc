@@ -656,7 +656,6 @@ srsran::byte_buffer_t* mac_nr::assemble_rar(srsran::const_span<sched_nr_interfac
 
   for (auto& rar_grant : grants) {
     srsran::mac_rar_subpdu_nr& rar_subpdu = rar_pdu.add_subpdu();
-
     // set values directly coming from scheduler
     rar_subpdu.set_ta(rar_grant.data.ta_cmd);
     rar_subpdu.set_rapid(rar_grant.data.preamble_idx);

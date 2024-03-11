@@ -113,6 +113,7 @@ private:
     // Average all measurements
     for (uint32_t i = 0; i < meas_count; i++) {
       // Write here a much fancier extrapolation algorithm
+      printf("ta_us - measurement values i=%d - ta_us=%f\n", i, ta_us);
       ta_us += meas_values[i].ta_us;
     }
     if (meas_count) {
@@ -137,7 +138,9 @@ private:
     }
 
     // Get TA command value
-    int ta_n = get_ta_n();
+    int ta_n = 0; //get_ta_n();
+
+    // printf("ta_n value: %d\n", ta_n);
 
     // Send command
     if (abs(ta_n) > TA_N_THRESHOLD) {

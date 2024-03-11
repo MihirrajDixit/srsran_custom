@@ -1,0 +1,46 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"srsenb/src/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 69,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "bin",
+			"isOptional" : true,
+			"paths" : 
+			[
+				"srsenb/src/srsenb"
+			],
+			"targetId" : "srsenb::@63b29609aa928c190691",
+			"targetIndex" : 265,
+			"type" : "target"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "srsenb/src",
+		"source" : "srsenb/src"
+	}
+}

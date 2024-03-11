@@ -750,6 +750,7 @@ bool sch_subh::set_phr(float phr)
 
 bool sch_subh::set_ta_cmd(uint8_t ta_cmd)
 {
+  printf("TA CMD - pdu.cc - %d\n", ta_cmd);
   if (((sch_pdu*)parent)->has_space_ce(1)) {
     w_payload_ce[0] = ta_cmd & 0x3f;
     lcid            = (uint32_t)dl_sch_lcid::TA_CMD;
