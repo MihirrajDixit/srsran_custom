@@ -26,7 +26,11 @@
 #include "srsran/phy/common/phy_common.h"
 
 #include <cmath>
+#include <list>
 #include <vector>
+// #include <iostream>
+// #include <vector>
+#include <algorithm>
 
 namespace srsenb {
 
@@ -108,16 +112,39 @@ private:
    */
   int get_ta_n()
   {
-    float ta_us = 0.0f;
-
-    // Average all measurements
+    double              ta_us = 0.0f;
+    std::vector<double> ta_us_vec;
+    ta_us_vec.reserve(meas_count);
     for (uint32_t i = 0; i < meas_count; i++) {
-      // Write here a much fancier extrapolation algorithm
-      printf("ta_us - measurement values i=%d - ta_us=%f\n", i, ta_us);
-      ta_us += meas_values[i].ta_us;
+      if (meas_values[i].ta_us < 2.0) {
+        ta_us_vec.push_back(meas_values[i].ta_us);
+      }
+      // printf("ta_us - measurement values i=%d - ta_us=%f\n", i, meas_values[i].ta_us);
     }
+
+    sort(ta_us_vec.begin(), ta_us_vec.end());
+
+    // // Average all measurements
+    // for (uint32_t i = 0; i < meas_count; i++) {
+    //   // Write here a much fancier extrapolation algorithm
+    //   printf("ta_us - measurement values i=%d - ta_us=%f\n", i, meas_values[i].ta_us);
+    //   // if(meas_values[i].ta_us){
+
+    //   // }
+    //   ta_us += meas_values[i].ta_us;
+    // }
+
+    // printf("ta_us - ta_us=%f\n", ta_us);
     if (meas_count) {
-      ta_us /= static_cast<float>(meas_count);
+      // ta_us /= static_cast<float>(meas_count);
+      if (!ta_us_vec.empty()) {
+        if (ta_us_vec.size() % 2 == 0) {
+          ta_us = (ta_us_vec[ta_us_vec.size() / 2 - 1] + ta_us_vec[ta_us_vec.size() / 2]) / 2;
+        } else {
+          ta_us = ta_us_vec[ta_us_vec.size() / 2];
+        }
+        // printf("ta_us - meas_count - %u, ta_us=%f\n", meas_count, ta_us);
+      }
     }
 
     // Return the n_ta value
@@ -138,7 +165,7 @@ private:
     }
 
     // Get TA command value
-    int ta_n = 0; //get_ta_n();
+    int ta_n = get_ta_n();
 
     // printf("ta_n value: %d\n", ta_n);
 

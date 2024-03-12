@@ -877,7 +877,7 @@ double radio::get_dev_cal_tx_adv_sec(const std::string& device_name)
   /* Set time advance for each known device if in auto mode */
   if (tx_adv_auto) {
     /* This values have been calibrated using the prach_test_usrp tool in srsRAN */
-
+    printf("cur_tx_srate is %f\n", cur_tx_srate);
     if (device_name == "uhd_b200") {
       double srate_khz = round(cur_tx_srate / 1e3);
       if (srate_khz == 1.92e3) {
