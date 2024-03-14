@@ -1,5 +1,13 @@
 {
     "files.associations": {
-        "new": "cpp"
+        "new": "cpp",
+        "debug.h": "c",
+        "chrono": "c",
+        "math.h": "c",
+        "prach_tables.h": "c",
+        "phy_common.h": "c",
+        "prach.h": "c",
+        "phy_common_nr.h": "c",
+        "vector.h": "c"
     }
 }

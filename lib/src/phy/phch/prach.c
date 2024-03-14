@@ -22,14 +22,15 @@
 #include <assert.h>
 #include <math.h>
 #include <string.h>
-
+// #include <fstream>
 #include "srsran/phy/common/phy_common.h"
 #include "srsran/phy/common/phy_common_nr.h"
 #include "srsran/phy/phch/prach.h"
 #include "srsran/phy/utils/debug.h"
 #include "srsran/phy/utils/vector.h"
-
+// #include "srsran/phy/phch/chrono.h"
 #include "prach_tables.h"
+#include <time.h>
 
 // PRACH detection threshold is PRACH_DETECT_FACTOR*average
 #define PRACH_DETECT_FACTOR 18
@@ -1007,6 +1008,13 @@ int srsran_prach_detect_offset(srsran_prach_t* p,
     }
 
     ret = SRSRAN_SUCCESS;
+    // if(n_indices){
+    //     struct timespec ts;
+    //     timespec_get(&ts, TIME_UTC);
+    //     char buff[100];
+    //     strftime(buff, sizeof buff, "%D %T", gmtime(&ts.tv_sec));
+    //     printf("srsran_prach_detect time: %s.%09ld UTC\n", buff, ts.tv_nsec);
+    // }
   }
   return ret;
 }

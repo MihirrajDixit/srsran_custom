@@ -23,6 +23,7 @@
 #include "srsran/common/standard_streams.h"
 #include "srsran/interfaces/phy_interface_types.h"
 #include "srsran/srsran.h"
+#include <chrono>
 
 #define Error(fmt, ...)                                                                                                \
   if (SRSRAN_DEBUG_ENABLED)                                                                                            \
@@ -239,12 +240,19 @@ cf_t* prach::generate(float cfo, uint32_t* nof_sf, float* target_power)
     *target_power = target_power_dbm;
   }
 
-  Info("PRACH: Transmitted preamble=%d, tti_tx=%d, CFO=%.2f KHz, nof_sf=%d, target_power=%.1f dBm",
+  uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+  printf("PRACH: Transmitted preamble=%d, tti_tx=%d, CFO=%.2f KHz, nof_sf=%d, target_power=%.1f dBm, preamble_timing: %lu\n",
+      preamble_idx,
+      transmitted_tti,
+      cfo * 15,
+      nsf,
+      target_power_dbm, ns);
+  Info("PRACH: Transmitted preamble=%d, tti_tx=%d, CFO=%.2f KHz, nof_sf=%d, target_power=%.1f dBm, preamble_timing: %lu\n",
        preamble_idx,
        transmitted_tti,
        cfo * 15,
        nsf,
-       target_power_dbm);
+       target_power_dbm, ns);
   preamble_idx = -1;
 
   return signal_buffer;

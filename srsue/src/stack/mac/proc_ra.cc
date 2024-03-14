@@ -156,6 +156,7 @@ void ra_proc::state_pdcch_setup()
   if (info.is_transmitted) {
     ra_tti  = info.tti_ra;
     ra_rnti = 1 + (ra_tti % 10) + (10 * info.f_id);
+    
     rInfo("seq=%d, ra-rnti=0x%x, ra-tti=%d, f_id=%d", sel_preamble.load(), ra_rnti, info.tti_ra, info.f_id);
     srsran::console("Random Access Transmission%s: seq=%d, tti=%d, ra-rnti=0x%x\n",
                     (started_by_pdcch) ? " (PDCCH order)" : "",

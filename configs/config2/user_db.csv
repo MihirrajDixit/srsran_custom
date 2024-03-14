@@ -1,0 +1,27 @@
+#                                                                                           
+# .csv to store UE's information in HSS                                                     
+# Kept in the following format: "Name,Auth,IMSI,Key,OP_Type,OP/OPc,AMF,SQN,QCI,IP_alloc"  
+#                                                                                           
+# Name:     Human readable name to help distinguish UE's. Ignored by the HSS                
+# Auth:     Authentication algorithm used by the UE. Valid algorithms are XOR               
+#           (xor) and MILENAGE (mil)                                                        
+# IMSI:     UE's IMSI value                                                                 
+# Key:      UE's key, where other keys are derived from. Stored in hexadecimal              
+# OP_Type:  Operator's code type, either OP or OPc                                          
+# OP/OPc:   Operator Code/Cyphered Operator Code, stored in hexadecimal                     
+# AMF:      Authentication management field, stored in hexadecimal                          
+# SQN:      UE's Sequence number for freshness of the authentication                        
+# QCI:      QoS Class Identifier for the UE's default bearer.                               
+# IP_alloc: IP allocation stratagy for the SPGW.                                            
+#           With 'dynamic' the SPGW will automatically allocate IPs                         
+#           With a valid IPv4 (e.g. '172.16.0.2') the UE will have a statically assigned IP.
+#                                                                                           
+# Note: Lines starting by '#' are ignored and will be overwritten                           
+ue2,mil,001010123456780,00112233445566778899aabbccddeeff,opc,63bfa50ee6523365ff14c1f45f88737d,8000,000000001234,7,dynamic
+ue1,xor,001010123456789,00112233445566778899aabbccddeeff,opc,63bfa50ee6523365ff14c1f45f88737d,9001,000000001234,7,dynamic
+ue3,xor,999700000087410,d6c03012245caa4a834a5c0de2190c65,opc,31cbe1a82b8d0acc74da83a960b94766,8000,000000001234,9,dynamic
+ue7,xor,999700000087411,7e6e55cf97312b2769a2def0363503d1,opc,b066129207b81d7a35a798882e49218f,8000,000000001234,9,dynamic
+ue5,xor,999700000087415,8b2e08ff2819249a0b88689291d5f228,opc,21df8b7eda19bfd771498c11d9f4765d,8000,000000001234,9,dynamic
+ue6,mil,999700000087416,a75e73cb2c17ab7c7cce417caa245d07,opc,adae964f99ed3c4d9255b0d62137f77d,8000,00000000131b,9,dynamic
+ue4,mil,999700123456780,00112233445566778899aabbccddeeff,opc,63bfa50ee6523365ff14c1f45f88737d,8000,000000001276,9,dynamic
+ue8,mil,999700123456790,00112233445566778899aabbccddeeff,opc,63bfa50ee6523365ff14c1f45f88737d,8000,000000001234,9,dynamic

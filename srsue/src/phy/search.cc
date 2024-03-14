@@ -174,6 +174,12 @@ search::ret_code search::run(srsran_cell_t* cell_, std::array<uint8_t, SRSRAN_BC
   float cfo           = found_cells[max_peak_cell].cfo;
 
   srsran::console("\n");
+  uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+  printf("SYNC:  PSS/SSS detected: Mode=%s, PCI=%d, CFO=%.1f KHz, CP=%s, pss/sss_timing: %lu\n",
+      new_cell.frame_type ? "TDD" : "FDD",
+      new_cell.id,
+      cfo / 1000,
+      srsran_cp_string(new_cell.cp), ns);
   Info("SYNC:  PSS/SSS detected: Mode=%s, PCI=%d, CFO=%.1f KHz, CP=%s",
        new_cell.frame_type ? "TDD" : "FDD",
        new_cell.id,
@@ -209,12 +215,13 @@ search::ret_code search::run(srsran_cell_t* cell_, std::array<uint8_t, SRSRAN_BC
             new_cell.cp ? "Extended" : "Normal",
             cfo / 1000);
 
-    Info("SYNC:  MIB Decoded: Mode=%s, PCI=%d, PRB=%d, Ports=%d, CFO=%.1f KHz",
+    ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+    Info("SYNC:  MIB Decoded: Mode=%s, PCI=%d, PRB=%d, Ports=%d, CFO=%.1f KHz, MIB_timing: %lu\n",
          new_cell.frame_type ? "TDD" : "FDD",
          new_cell.id,
          new_cell.nof_prb,
          new_cell.nof_ports,
-         cfo / 1000);
+         cfo / 1000, ns);
 
     if (!srsran_cell_isvalid(&new_cell)) {
       Error("SYNC:  Detected invalid cell.");

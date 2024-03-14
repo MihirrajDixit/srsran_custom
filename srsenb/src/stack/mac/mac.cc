@@ -617,22 +617,23 @@ void mac::rach_detected(uint32_t tti, uint32_t enb_cc_idx, uint32_t preamble_idx
       return (enb_cc_idx < cell_config.size()) ? cell_config[enb_cc_idx].cell.id : 0;
     };
     uint32_t pci = get_pci();
-    logger.info("%sRACH:  tti=%d, cc=%d, pci=%d, preamble=%d, offset=%d, temp_crnti=0x%x",
+    uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+    logger.info("%sRACH:  tti=%d, cc=%d, pci=%d, preamble=%d, offset=%d, temp_crnti=0x%x, RAR_timing: %lu\n",
                 (is_po_prach) ? "PDCCH order " : "",
                 tti,
                 enb_cc_idx,
                 pci,
                 preamble_idx,
                 time_adv,
-                rnti);
-    srsran::console("%sRACH:  tti=%d, cc=%d, pci=%d, preamble=%d, offset=%d, temp_crnti=0x%x\n",
+                rnti, ns);
+    srsran::console("%sRACH:  tti=%d, cc=%d, pci=%d, preamble=%d, offset=%d, temp_crnti=0x%x, RAR_timing: %lu\n",
                     (is_po_prach) ? "PDCCH order " : "",
                     tti,
                     enb_cc_idx,
                     pci,
                     preamble_idx,
                     time_adv,
-                    rnti);
+                    rnti, ns);
   });
 }
 

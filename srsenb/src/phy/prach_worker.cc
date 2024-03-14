@@ -23,6 +23,8 @@
 #include "srsran/interfaces/enb_mac_interfaces.h"
 #include "srsran/srsran.h"
 
+#include <chrono>
+
 namespace srsenb {
 
 int prach_worker::init(const srsran_cell_t&      cell_,
@@ -156,15 +158,26 @@ int prach_worker::run_tti(sf_buffer* b)
     }
 
     if (prach_nof_det) {
+      uint64_t ns;
       for (uint32_t i = 0; i < prach_nof_det; i++) {
-        logger.info("PRACH: cc=%d, %d/%d, preamble=%d, offset=%.1f us, peak2avg=%.1f, max_offset=%.1f us",
+        ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+        logger.info("PRACH: cc=%d, %d/%d, preamble=%d, offset=%.1f us, peak2avg=%.1f, max_offset=%.1f us, epoch=%lu\n",
                     cc_idx,
                     i,
                     prach_nof_det,
                     prach_indices[i],
                     prach_offsets[i] * 1e6,
                     prach_p2avg[i],
-                    max_prach_offset_us);
+                    max_prach_offset_us, ns);
+                    
+        printf("PRACH: cc=%d, %d/%d, preamble=%d, offset=%.1f us, peak2avg=%.1f, max_offset=%.1f us, epoch=%lu\n",
+                    cc_idx,
+                    i,
+                    prach_nof_det,
+                    prach_indices[i],
+                    prach_offsets[i] * 1e6,
+                    prach_p2avg[i],
+                    max_prach_offset_us, ns);
 
         if (prach_offsets[i] * 1e6 < max_prach_offset_us) {
           // Convert time offset to Time Alignment command
