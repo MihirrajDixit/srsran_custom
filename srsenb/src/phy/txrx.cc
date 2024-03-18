@@ -25,6 +25,9 @@
 #include "srsran/common/band_helper.h"
 #include "srsran/common/threads.h"
 #include "srsran/srsran.h"
+#include <chrono>
+#include <iostream>
+#include <fstream>
 
 #define Error(fmt, ...)                                                                                                \
   if (SRSRAN_DEBUG_ENABLED)                                                                                            \
@@ -187,6 +190,17 @@ void txrx::run_thread()
 
     buffer.set_nof_samples(sf_len);
     radio_h->rx_now(buffer, timestamp);
+    // uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+    // // printf("RX - ENB Receive - %lu\n", ns);
+    // std::ofstream myfile;
+    // myfile.open ("timing_frames.txt", std::ios_base::app);
+    // if (myfile.is_open()) { // Check if the file is successfully opened
+    //   myfile << "RX - ENB Receive - " << ns << std::endl; // Write data to the file
+    //   myfile.close(); // Close the file
+    //   // std::cout << "Data written to timing.csv successfully." << std::endl; // Optional: Print a success message
+    // } else {
+    //   std::cerr << "Error opening file." << std::endl; // Print an error message if the file couldn't be opened
+    // }
 
     if (ul_channel) {
       ul_channel->run(buffer.to_cf_t(), buffer.to_cf_t(), sf_len, timestamp.get(0));

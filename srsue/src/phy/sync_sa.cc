@@ -21,6 +21,9 @@
 
 #include "srsue/hdr/phy/nr/sync_sa.h"
 #include "srsran/radio/rf_buffer.h"
+#include <chrono>
+#include <fstream>
+#include <iostream>
 
 namespace srsue {
 namespace nr {
@@ -368,6 +371,19 @@ void sync_sa::worker_end(const srsran::phy_common_interface::worker_context_t& w
   if (tx_enable) {
     // Actual baseband transmission
     radio->tx(tx_buffer, tx_time);
+    // uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+    // // printf("TX - UE Send - %lu\n", ns);
+    // std::ofstream myfile;
+    // myfile.open ("timing_frames.txt", std::ios_base::app);
+
+    // // myfile << "PRACH Preamble %d - UE Sent - %lu\n", preamble_idx, ns;
+    // if (myfile.is_open()) { // Check if the file is successfully opened
+    //   myfile << "TX - UE Send - " << ns << std::endl;
+    //   myfile.close(); // Close the file
+    //   // std::cout << "Data written to timing_frames.txt successfully." << std::endl; // Optional: Print a success message
+    // } else {
+    //   std::cerr << "Error opening file." << std::endl; // Print an error message if the file couldn't be opened
+    // }
   } else {
     if (radio->is_continuous_tx()) {
       if (is_pending_tx_end) {
@@ -378,6 +394,19 @@ void sync_sa::worker_end(const srsran::phy_common_interface::worker_context_t& w
           srsran::rf_buffer_t zeros_multi;
           zeros_multi.set_nof_samples(tx_buffer.get_nof_samples());
           radio->tx(zeros_multi, tx_time);
+          // uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+          // // printf("TX - UE Send - %lu\n", ns);
+          // std::ofstream myfile;
+          // myfile.open ("timing_frames.txt", std::ios_base::app);
+
+          // // myfile << "PRACH Preamble %d - UE Sent - %lu\n", preamble_idx, ns;
+          // if (myfile.is_open()) { // Check if the file is successfully opened
+          //   myfile << "TX - UE Send - " << ns << std::endl;
+          //   myfile.close(); // Close the file
+          //   // std::cout << "Data written to timing_frames.txt successfully." << std::endl; // Optional: Print a success message
+          // } else {
+          //   std::cerr << "Error opening file." << std::endl; // Print an error message if the file couldn't be opened
+          // }
         }
       }
     } else {

@@ -509,7 +509,7 @@ void rrc::ue::handle_rrc_con_req(rrc_conn_request_s* msg)
   std::ofstream myfile;
   myfile.open ("timing.csv", std::ios_base::app);
   if (myfile.is_open()) { // Check if the file is successfully opened
-    myfile << "RRC Connection Setup - ENB Sent - " << ns << std::endl; // Write data to the file
+    myfile << "RRC Connection Setup,ENB Sent," << ns << std::endl; // Write data to the file
     myfile.close(); // Close the file
     std::cout << "Data written to timing.csv successfully." << std::endl; // Optional: Print a success message
   } else {

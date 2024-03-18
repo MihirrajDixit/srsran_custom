@@ -163,12 +163,12 @@ int prach_worker::run_tti(sf_buffer* b)
       uint64_t ns;
       for (uint32_t i = 0; i < prach_nof_det; i++) {
         ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
-        printf("PRACH Preamble %d - ENB Received - %lu\n", prach_indices[i], ns);
+        printf("PRACH Preamble %d,ENB Received,%lu\n", prach_indices[i], ns);
         std::ofstream myfile;
         myfile.open ("timing.csv", std::ios_base::app);
         // myfile << "PRACH Preamble %d - UE Sent - %lu\n", preamble_idx, ns;
         if (myfile.is_open()) { // Check if the file is successfully opened
-        myfile << "PRACH Preamble " << prach_indices[i] << " - ENB Received - " << ns << std::endl;
+        myfile << "PRACH Preamble " << prach_indices[i] << ",ENB Received," << ns << std::endl;
         myfile.close(); // Close the file
         std::cout << "Data written to timing.csv successfully." << std::endl; // Optional: Print a success message
         } else {

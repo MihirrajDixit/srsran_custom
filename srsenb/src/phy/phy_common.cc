@@ -25,6 +25,9 @@
 #include <sstream>
 
 #include <assert.h>
+#include <chrono>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 using namespace asn1::rrc;
@@ -159,7 +162,19 @@ void phy_common::worker_end(const worker_context_t& w_ctx, const bool& tx_enable
 
   // Always transmit on single radio
   radio->tx(tx_buffer, tx_time);
+  // uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+  // // printf("TX - ENB SEND - %lu\n", ns);
+  // std::ofstream myfile;
+  // myfile.open ("timing_frames.txt", std::ios_base::app);
 
+  // // myfile << "PRACH Preamble %d - UE Sent - %lu\n", preamble_idx, ns;
+  // if (myfile.is_open()) { // Check if the file is successfully opened
+  //   myfile << "TX - ENB SEND -" << ns << std::endl;
+  //   myfile.close(); // Close the file
+  //   // std::cout << "Data written to timing_frames.txt successfully." << std::endl; // Optional: Print a success message
+  // } else {
+  //   std::cerr << "Error opening file." << std::endl; // Print an error message if the file couldn't be opened
+  // }
   // Reset transmit buffer
   tx_buffer = {};
 

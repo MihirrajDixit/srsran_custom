@@ -27,6 +27,9 @@
 
 #include <algorithm>
 #include <unistd.h>
+#include <iostream>
+#include <fstream>
+#include <chrono>
 
 #define Error(fmt, ...)                                                                                                \
   if (SRSRAN_DEBUG_ENABLED)                                                                                            \
@@ -980,6 +983,18 @@ int sync::radio_recv_fnc(srsran::rf_buffer_t& data, srsran_timestamp_t* rx_time)
   if (not radio_h->rx_now(data, rf_timestamp)) {
     return SRSRAN_ERROR;
   }
+
+  // uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+  // // printf("RX - UE Receive - %lu\n", ns);
+  // std::ofstream myfile;
+  // myfile.open ("timing_frames.txt", std::ios_base::app);
+  // if (myfile.is_open()) { // Check if the file is successfully opened
+  //   myfile << "RX - UE Receive - " << ns << std::endl; // Write data to the file
+  //   myfile.close(); // Close the file
+  //   // std::cout << "Data written to timing.csv successfully." << std::endl; // Optional: Print a success message
+  // } else {
+  //   std::cerr << "Error opening file." << std::endl; // Print an error message if the file couldn't be opened
+  // }
 
   srsran_timestamp_t dummy_flat_ts = {};
 
