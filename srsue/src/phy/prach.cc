@@ -24,6 +24,8 @@
 #include "srsran/interfaces/phy_interface_types.h"
 #include "srsran/srsran.h"
 #include <chrono>
+#include <fstream>
+#include <iostream>
 
 #define Error(fmt, ...)                                                                                                \
   if (SRSRAN_DEBUG_ENABLED)                                                                                            \
@@ -247,6 +249,20 @@ cf_t* prach::generate(float cfo, uint32_t* nof_sf, float* target_power)
       cfo * 15,
       nsf,
       target_power_dbm, ns);
+
+  printf("PRACH Preamble %d - UE Sent - %lu\n", preamble_idx, ns);
+  std::ofstream myfile;
+  myfile.open ("timing.csv", std::ios_base::app);
+  // myfile << "PRACH Preamble %d - UE Sent - %lu\n", preamble_idx, ns;
+  if (myfile.is_open()) { // Check if the file is successfully opened
+    myfile << "PRACH Preamble " << preamble_idx << ",UE Sent," << ns << std::endl;
+    myfile.close(); // Close the file
+    std::cout << "Data written to timing.csv successfully." << std::endl; // Optional: Print a success message
+  } else {
+    std::cerr << "Error opening file." << std::endl; // Print an error message if the file couldn't be opened
+  }
+
+
   Info("PRACH: Transmitted preamble=%d, tti_tx=%d, CFO=%.2f KHz, nof_sf=%d, target_power=%.1f dBm, preamble_timing: %lu\n",
        preamble_idx,
        transmitted_tti,

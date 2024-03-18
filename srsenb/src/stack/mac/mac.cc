@@ -31,7 +31,9 @@
 #include "srsran/interfaces/enb_rlc_interfaces.h"
 #include "srsran/interfaces/enb_rrc_interface_mac.h"
 #include "srsran/srslog/event_trace.h"
-
+#include <chrono>
+#include <iostream>
+#include <fstream>
 // #define WRITE_SIB_PCAP
 using namespace asn1::rrc;
 
@@ -618,6 +620,16 @@ void mac::rach_detected(uint32_t tti, uint32_t enb_cc_idx, uint32_t preamble_idx
     };
     uint32_t pci = get_pci();
     uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+    printf("RAR - ENB Sent - %lu\n", ns);
+    std::ofstream myfile;
+    myfile.open ("timing.csv", std::ios_base::app);
+    if (myfile.is_open()) { // Check if the file is successfully opened
+      myfile << "RAR,ENB Sent," << ns << std::endl; // Write data to the file
+      myfile.close(); // Close the file
+      std::cout << "Data written to timing.csv successfully." << std::endl; // Optional: Print a success message
+    } else {
+      std::cerr << "Error opening file." << std::endl; // Print an error message if the file couldn't be opened
+    }
     logger.info("%sRACH:  tti=%d, cc=%d, pci=%d, preamble=%d, offset=%d, temp_crnti=0x%x, RAR_timing: %lu\n",
                 (is_po_prach) ? "PDCCH order " : "",
                 tti,

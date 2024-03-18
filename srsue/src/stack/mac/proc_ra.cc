@@ -27,6 +27,8 @@
 #include <inttypes.h> // for printing uint64_t
 #include <stdint.h>
 #include <stdlib.h>
+#include <chrono>
+#include <iostream>
 
 /* Random access procedure as specified in Section 5.1 of 36.321 */
 
@@ -156,13 +158,13 @@ void ra_proc::state_pdcch_setup()
   if (info.is_transmitted) {
     ra_tti  = info.tti_ra;
     ra_rnti = 1 + (ra_tti % 10) + (10 * info.f_id);
-    
-    rInfo("seq=%d, ra-rnti=0x%x, ra-tti=%d, f_id=%d", sel_preamble.load(), ra_rnti, info.tti_ra, info.f_id);
-    srsran::console("Random Access Transmission%s: seq=%d, tti=%d, ra-rnti=0x%x\n",
+    uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+    rInfo("seq=%d, ra-rnti=0x%x, ra-tti=%d, f_id=%d", sel_preamble.load(), ra_rnti, info.tti_ra, info.f_id, ns);
+    srsran::console("Random Access Transmission%s: seq=%d, tti=%d, ra-rnti=0x%x, timing: %lu\n",
                     (started_by_pdcch) ? " (PDCCH order)" : "",
                     sel_preamble.load(),
                     info.tti_ra,
-                    ra_rnti);
+                    ra_rnti, ns);
     rar_window_st = ra_tti + 3;
     rntis->set_rar_rnti(ra_rnti);
     state = RESPONSE_RECEPTION;
@@ -384,7 +386,8 @@ void ra_proc::tb_decoded_ok(const uint8_t cc_idx, const uint32_t tti)
   if (rar_pdu_msg.parse_packet(rar_pdu_buffer) != SRSRAN_SUCCESS) {
     rError("Error decoding RAR PDU");
   }
-
+  uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+  printf("RAR Decoded success - timing: %lu\n", ns);
   rDebug("RAR decoded successfully TBS=%d", rar_grant_nbytes);
 
   // Set Backoff parameter

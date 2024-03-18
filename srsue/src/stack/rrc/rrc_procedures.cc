@@ -28,6 +28,9 @@
 #include "srsran/interfaces/ue_usim_interfaces.h"
 #include "srsue/hdr/stack/rrc/rrc_meas.h"
 #include <inttypes.h> // for printing uint64_t
+#include <chrono>
+#include <iostream>
+#include <fstream>
 
 #define Error(fmt, ...) rrc_ptr->logger.error("Proc \"%s\" - " fmt, name(), ##__VA_ARGS__)
 #define Warning(fmt, ...) rrc_ptr->logger.warning("Proc \"%s\" - " fmt, name(), ##__VA_ARGS__)
@@ -38,6 +41,7 @@ namespace srsue {
 
 using srsran::proc_outcome_t;
 using srsran::tti_point;
+
 
 /**************************************
  *       Cell Search Procedure

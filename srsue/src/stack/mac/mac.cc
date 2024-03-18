@@ -30,6 +30,9 @@
 #include "srsran/common/pcap.h"
 #include "srsran/interfaces/ue_phy_interfaces.h"
 #include "srsue/hdr/stack/mac/mac.h"
+#include <chrono>
+#include <fstream>
+#include <iostream>
 
 namespace srsue {
 
@@ -374,6 +377,17 @@ void mac::tb_decoded(uint32_t cc_idx, mac_grant_dl_t grant, bool ack[SRSRAN_MAX_
     ra_procedure.start_pdcch_order();
   } else if (SRSRAN_RNTI_ISRAR(grant.rnti)) {
     if (ack[0]) {
+      uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+      printf("RAR - UE Received - %lu\n", ns);
+      std::ofstream myfile;
+      myfile.open ("timing.csv", std::ios_base::app);
+      if (myfile.is_open()) { // Check if the file is successfully opened
+        myfile << "RAR,UE Received," << ns << std::endl; // Write data to the file
+        myfile.close(); // Close the file
+        std::cout << "Data written to timing.csv successfully." << std::endl; // Optional: Print a success message
+      } else {
+        std::cerr << "Error opening file." << std::endl; // Print an error message if the file couldn't be opened
+      }
       ra_procedure.tb_decoded_ok(cc_idx, grant.tti);
     }
   } else if (grant.rnti == SRSRAN_PRNTI) {

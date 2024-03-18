@@ -40,6 +40,8 @@
 #include <math.h>
 #include <numeric>
 #include <string.h>
+#include <chrono>
+#include <fstream>
 
 std::atomic<bool> simulate_rlf{false};
 
@@ -1024,6 +1026,17 @@ void rrc::send_con_setup_complete(srsran::unique_byte_buffer_t nas_msg)
   memcpy(rrc_conn_setup_complete->ded_info_nas.data(), nas_msg->msg, nas_msg->N_bytes); // TODO Check!
 
   send_ul_dcch_msg(srb_to_lcid(lte_srb::srb1), ul_dcch_msg);
+  uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+  printf("RRC Connection Setup Complete - UE Sent - %lu\n", ns);
+  std::ofstream myfile;
+  myfile.open ("timing.csv", std::ios_base::app);
+  if (myfile.is_open()) { // Check if the file is successfully opened
+    myfile << "RRC Connection Setup Complete,UE Sent," << ns << std::endl;
+    myfile.close(); // Close the file
+    std::cout << "Data written to timing.csv successfully." << std::endl; // Optional: Print a success message
+  } else {
+    std::cerr << "Error opening file." << std::endl; // Print an error message if the file couldn't be opened
+  }
 }
 
 void rrc::send_ul_info_transfer(unique_byte_buffer_t nas_msg)

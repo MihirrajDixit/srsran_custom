@@ -35,6 +35,9 @@
 #include "srsran/interfaces/enb_mac_interfaces.h"
 #include "srsran/interfaces/enb_pdcp_interfaces.h"
 #include "srsran/interfaces/enb_rlc_interfaces.h"
+#include <chrono>
+#include <iostream>
+#include <fstream>
 
 using srsran::byte_buffer_t;
 
@@ -660,9 +663,21 @@ void rrc::parse_ul_ccch(ue& ue, srsran::unique_byte_buffer_t pdu)
 
   switch (ul_ccch_msg.msg.c1().type().value) {
     case ul_ccch_msg_type_c::c1_c_::types::rrc_conn_request:
+      {uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+      printf("RRC Connection Request - ENB Received - %lu\n", ns);
+      std::ofstream myfile;
+      myfile.open ("timing.csv", std::ios_base::app);
+      if (myfile.is_open()) { // Check if the file is successfully opened
+        myfile << "RRC Connection Request,ENB Received," << ns << std::endl; // Write data to the file
+        myfile.close(); // Close the file
+        std::cout << "Data written to timing.csv successfully." << std::endl; // Optional: Print a success message
+      } else {
+        std::cerr << "Error opening file." << std::endl; // Print an error message if the file couldn't be opened
+      }
       ue.save_ul_message(std::move(pdu));
       ue.handle_rrc_con_req(&ul_ccch_msg.msg.c1().rrc_conn_request());
       break;
+      }
     case ul_ccch_msg_type_c::c1_c_::types::rrc_conn_reest_request:
       ue.save_ul_message(std::move(pdu));
       ue.handle_rrc_con_reest_req(&ul_ccch_msg.msg.c1().rrc_conn_reest_request());

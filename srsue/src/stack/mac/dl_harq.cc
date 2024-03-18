@@ -27,6 +27,9 @@
 #include "srsue/hdr/stack/mac/dl_harq.h"
 #include "srsran/common/mac_pcap.h"
 #include "srsran/common/timers.h"
+#include <iostream>
+#include <fstream>
+#include <chrono>
 
 namespace srsue {
 
@@ -336,6 +339,19 @@ void dl_harq_entity::dl_harq_process::dl_tb_process::tb_decoded(mac_interface_ph
               payload_buffer_ptr, cur_grant.tb[tid].tbs, cur_grant.rnti, ack, cur_grant.tti, harq_entity->cc_idx);
         }
         if (cur_grant.rnti == harq_entity->rntis->get_temp_rnti()) {
+          uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+          printf("RRC Connection Setup - UE Received - %lu\n", ns);
+          std::ofstream myfile;
+          myfile.open ("timing.csv", std::ios_base::app);
+
+          // myfile << "PRACH Preamble %d - UE Sent - %lu\n", preamble_idx, ns;
+          if (myfile.is_open()) { // Check if the file is successfully opened
+            myfile << "RRC Connection Setup,UE Received," << ns << std::endl;
+            myfile.close(); // Close the file
+            std::cout << "Data written to timing.csv successfully." << std::endl; // Optional: Print a success message
+          } else {
+            std::cerr << "Error opening file." << std::endl; // Print an error message if the file couldn't be opened
+          }
           Debug("Delivering PDU=%d bytes to Dissassemble and Demux unit (Temporal C-RNTI)", cur_grant.tb[tid].tbs);
           harq_entity->demux_unit->push_pdu_temp_crnti(payload_buffer_ptr, cur_grant.tb[tid].tbs);
 

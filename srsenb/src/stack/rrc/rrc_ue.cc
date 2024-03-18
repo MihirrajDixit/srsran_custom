@@ -32,6 +32,9 @@
 #include "srsran/interfaces/enb_rlc_interfaces.h"
 #include "srsran/interfaces/enb_s1ap_interfaces.h"
 #include "srsran/support/srsran_assert.h"
+#include <fstream>
+#include <chrono>
+#include <iostream>
 
 using namespace asn1::rrc;
 
@@ -353,6 +356,19 @@ void rrc::ue::parse_ul_dcch(uint32_t lcid, srsran::unique_byte_buffer_t pdu)
 
   switch (ul_dcch_msg.msg.c1().type()) {
     case ul_dcch_msg_type_c::c1_c_::types::rrc_conn_setup_complete:
+      {
+        uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+        printf("RRC Connection Setup Complete - ENB Received - %lu\n", ns);
+        std::ofstream myfile;
+        myfile.open ("timing.csv", std::ios_base::app);
+        if (myfile.is_open()) { // Check if the file is successfully opened
+          myfile << "RRC Connection Setup Complete,ENB Received," << ns << std::endl; // Write data to the file
+          myfile.close(); // Close the file
+          std::cout << "Data written to timing.csv successfully." << std::endl; // Optional: Print a success message
+        } else {
+          std::cerr << "Error opening file." << std::endl; // Print an error message if the file couldn't be opened
+        }
+      }
       save_ul_message(std::move(original_pdu));
       handle_rrc_con_setup_complete(&ul_dcch_msg.msg.c1().rrc_conn_setup_complete(), std::move(pdu));
       set_activity_timeout(UE_INACTIVITY_TIMEOUT);
@@ -488,6 +504,17 @@ void rrc::ue::handle_rrc_con_req(rrc_conn_request_s* msg)
 
   establishment_cause = msg_r8->establishment_cause;
   send_connection_setup();
+  uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+  printf("RRC Connection Setup - ENB Sent - %lu\n", ns);
+  std::ofstream myfile;
+  myfile.open ("timing.csv", std::ios_base::app);
+  if (myfile.is_open()) { // Check if the file is successfully opened
+    myfile << "RRC Connection Setup - ENB Sent - " << ns << std::endl; // Write data to the file
+    myfile.close(); // Close the file
+    std::cout << "Data written to timing.csv successfully." << std::endl; // Optional: Print a success message
+  } else {
+    std::cerr << "Error opening file." << std::endl; // Print an error message if the file couldn't be opened
+  }
   state = RRC_STATE_WAIT_FOR_CON_SETUP_COMPLETE;
 
   set_activity_timeout(MSG5_RX_TIMEOUT_T300);
@@ -524,6 +551,7 @@ void rrc::ue::send_connection_setup()
   send_dl_ccch(&dl_ccch_msg, &octet_str);
 
   // Log event.
+
   asn1::json_writer json_writer;
   dl_ccch_msg.to_json(json_writer);
   event_logger::get().log_rrc_event(ue_cell_list.get_ue_cc_idx(UE_PCELL_CC_IDX)->cell_common->enb_cc_idx,

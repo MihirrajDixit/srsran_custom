@@ -24,6 +24,7 @@
 #include "srsran/common/string_helpers.h"
 #include <fstream>
 #include <iomanip>
+#include <chrono>
 #include <iostream>
 #include <unistd.h>
 
@@ -420,6 +421,7 @@ bool nas::connection_request_completed(bool outcome)
 {
   if (outcome == true) {
     logger.debug("RRC connection request completed. NAS State %s.", state.get_full_state_text().c_str());
+
     if (state.get_state() == emm_state_t::state_t::service_request_initiated) {
       srsran::console("Service Request successful.\n");
       logger.info("Service Request successful.");

@@ -28,6 +28,9 @@
 #include "srsran/common/interfaces_common.h"
 #include "srsran/common/mac_pcap.h"
 #include "srsran/common/timers.h"
+#include <chrono>
+#include <iostream>
+#include <fstream>
 
 namespace srsue {
 
@@ -240,6 +243,19 @@ void ul_harq_entity::ul_harq_process::new_grant_ul(mac_interface_phy_lte::mac_gr
           pdu_ptr = harq_entity->mux_unit->msg3_get(payload_buffer.get(), grant.tb.tbs);
           if (pdu_ptr) {
             generate_new_tx(grant, action);
+            uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+            printf("RRC Connection Request - UE Sent - %lu\n", ns);
+            std::ofstream myfile;
+            myfile.open ("timing.csv", std::ios_base::app);
+
+            // myfile << "PRACH Preamble %d - UE Sent - %lu\n", preamble_idx, ns;
+            if (myfile.is_open()) { // Check if the file is successfully opened
+              myfile << "RRC Connection Request,UE Sent," << ns << std::endl;
+              myfile.close(); // Close the file
+              std::cout << "Data written to timing.csv successfully." << std::endl; // Optional: Print a success message
+            } else {
+              std::cerr << "Error opening file." << std::endl; // Print an error message if the file couldn't be opened
+            }
           } else {
             Warning("UL RAR dci available but no Msg3 on buffer");
           }

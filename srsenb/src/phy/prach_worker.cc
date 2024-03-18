@@ -24,6 +24,8 @@
 #include "srsran/srsran.h"
 
 #include <chrono>
+#include <fstream>
+#include <iostream>
 
 namespace srsenb {
 
@@ -161,8 +163,20 @@ int prach_worker::run_tti(sf_buffer* b)
       uint64_t ns;
       for (uint32_t i = 0; i < prach_nof_det; i++) {
         ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+        printf("PRACH Preamble %d - ENB Received - %lu\n", prach_indices[i], ns);
+        std::ofstream myfile;
+        myfile.open ("timing.csv", std::ios_base::app);
+        // myfile << "PRACH Preamble %d - UE Sent - %lu\n", preamble_idx, ns;
+        if (myfile.is_open()) { // Check if the file is successfully opened
+        myfile << "PRACH Preamble " << prach_indices[i] << " - ENB Received - " << ns << std::endl;
+        myfile.close(); // Close the file
+        std::cout << "Data written to timing.csv successfully." << std::endl; // Optional: Print a success message
+        } else {
+        std::cerr << "Error opening file." << std::endl; // Print an error message if the file couldn't be opened
+        }
+
         logger.info("PRACH: cc=%d, %d/%d, preamble=%d, offset=%.1f us, peak2avg=%.1f, max_offset=%.1f us, epoch=%lu\n",
-                    cc_idx,
+                    cc_idx, 
                     i,
                     prach_nof_det,
                     prach_indices[i],
