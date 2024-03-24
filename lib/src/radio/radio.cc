@@ -27,6 +27,9 @@
 #include <list>
 #include <string>
 #include <unistd.h>
+#include <chrono>
+#include <fstream>
+#include <iostream>
 
 namespace srsran {
 
@@ -293,6 +296,7 @@ bool radio::rx_now(rf_buffer_interface& buffer, rf_timestamp_interface& rxd_time
   bool                         ret = true;
   rf_buffer_t                  buffer_rx;
 
+  
   // Extract decimation ratio. As the decimation may take some time to set a new ratio, deactivate the decimation and
   // keep receiving samples to avoid stalling the RX stream
   uint32_t ratio = 1; // No decimation by default
@@ -397,6 +401,17 @@ bool radio::rx_dev(const uint32_t& device_idx, const rf_buffer_interface& buffer
   // Subtract number of offset samples
   rx_offset_n.at(device_idx) = nof_samples_offset - ((int)nof_samples - (int)buffer.get_nof_samples());
 
+  uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+  printf("RX - ENB Receive - %lu\n", ns);
+  std::ofstream myfile;
+  myfile.open ("timing_frames_1.txt", std::ios_base::app);
+  if (myfile.is_open()) { // Check if the file is successfully opened
+    myfile << "RX - ENB Receive - " << ns << std::endl; // Write data to the file
+    myfile.close(); // Close the file
+    // std::cout << "Data written to timing.csv successfully." << std::endl; // Optional: Print a success message
+  } else {
+    std::cerr << "Error opening file." << std::endl; // Print an error message if the file couldn't be opened
+  }
   int ret =
       srsran_rf_recv_with_time_multi(&rf_devices[device_idx], radio_buffers, nof_samples, true, full_secs, frac_secs);
 

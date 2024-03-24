@@ -1,0 +1,6 @@
+2024-03-19T12:34:08.314138 [UE     ] [I] Using binary srsue with arguments: ue.conf 
+2024-03-19T12:34:08.437086 [UE     ] [I] Built in Release mode using commit ee91b89c9 on branch custom.
+2024-03-19T12:34:08.527504 [RF     ] [I] Configuring physical DL channel 0 with band-pass filter (0.0, 0.0)
+2024-03-19T12:34:08.527506 [RF     ] [I] Configuring physical UL channel 0 with band-pass filter (0.0, 0.0)
+2024-03-19T12:34:09.063209 [RF     ] [E] Error opening RF device
+2024-03-19T12:34:09.063210 [RF     ] [E] Error opening RF device 0
